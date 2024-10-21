@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
-import { getAllContacts, getContactById } from './services/contacts.js';
-import { createContact, deleteContact, updateContact } from '../services/contacts.js';
+import { createContact, deleteContact, getAllContacts, getContactById, updateContact } from '../services/contacts.js';
 
 export const getContactsController = async (req, res) => {
     const contacts = await getAllContacts();
