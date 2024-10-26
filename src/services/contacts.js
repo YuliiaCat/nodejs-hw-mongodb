@@ -15,11 +15,11 @@ export const createContact = async (payload) => {
   return contact;
 };
 
-export const updateContact = async (contactId, payload, options = { new: true }) => {
+export const updateContact = async (contactId, payload, options = {}) => {
   const updatedContact = await ContactsCollection.findByIdAndUpdate(
-    contactId,
+    { _id: contactId },
     payload,
-    { ...options, new: true },
+    ...options,
   );
 
   if (!updatedContact || !updatedContact.value) return null;
