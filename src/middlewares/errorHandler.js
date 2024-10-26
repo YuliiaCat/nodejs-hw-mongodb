@@ -1,11 +1,11 @@
 import { isHttpError } from 'http-errors';
 
 export const errorHandler = (error, req, res, next) => {
-  if (isHttpError(error) === true) {
+  if (isHttpError(error)) {
     return res
-      .status(error.status)
+      .status(error.status || 500)
       .json({
-        status: error.status,
+        status: error.status || 500,
         message: error.message,
         data: null, 
       });
