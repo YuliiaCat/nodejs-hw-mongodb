@@ -15,23 +15,8 @@ export const createContact = async (payload) => {
   return contact;
 };
 
-// export const updateContact = async (contactId, payload, options = {}) => {
-//   const updatedContact = await ContactsCollection.findByIdAndUpdate(
-//     contactId,
-//     payload,
-//     options,
-//   );
-
-//   if (!updatedContact || !updatedContact.value) return null;
-
-//   return {
-//     contact: updatedContact,
-//     isNew: false,
-//   };
-// };
-
 export const updateContact = async (contactId, contact) => {
- return ContactsCollection.findByIdAndUpdate(contactId, contact);
+ return ContactsCollection.findByIdAndUpdate(contactId, contact, { new: true });
 };
 
 export const deleteContact = async (contactId) => {

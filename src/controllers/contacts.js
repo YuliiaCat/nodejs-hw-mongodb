@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
 import { createContact, deleteContact, getAllContacts, getContactById, updateContact } from '../services/contacts.js';
-// import mongoose from 'mongoose';
 
 export const getContactsController = async (req, res) => {
     const contacts = await getAllContacts();
@@ -15,13 +14,9 @@ export const getContactsController = async (req, res) => {
 export const getContactsByIdController = async (req, res) => {
   const { contactId } = req.params;
 
-  // if (!mongoose.Types.ObjectId.isValid(contactId)) {
-  //   throw createHttpError(400, 'Invalid contact ID format');
-  // }
-
   const contact = await getContactById(contactId);
 
-  if(!contact) {
+  if(contact === null) {
     throw createHttpError(404, "Contact not found");
   }
 
@@ -46,7 +41,7 @@ export const patchContactController = async (req, res) => {
   const { contactId } = req.params;
   const updatedContact = await updateContact(contactId, req.body);
 
-  if (!updatedContact) {
+  if (updatedContact === null) {
     throw createHttpError(404, 'Contact not found');
   }
 
@@ -61,7 +56,7 @@ export const deleteContactController = async (req, res, next) => {
   const { contactId } = req.params;
   const contact = await deleteContact(contactId);
 
-  if (!contact) {
+  if (contact === null) {
     next(createHttpError(404, 'Contact not found'));
     return;
   }
