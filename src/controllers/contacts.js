@@ -1,6 +1,6 @@
 import createHttpError from 'http-errors';
 import { createContact, deleteContact, getAllContacts, getContactById, updateContact } from '../services/contacts.js';
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 
 export const getContactsController = async (req, res) => {
     const contacts = await getAllContacts();
@@ -15,9 +15,9 @@ export const getContactsController = async (req, res) => {
 export const getContactsByIdController = async (req, res) => {
   const { contactId } = req.params;
 
-  if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    throw createHttpError(400, 'Invalid contact ID format');
-  }
+  // if (!mongoose.Types.ObjectId.isValid(contactId)) {
+  //   throw createHttpError(400, 'Invalid contact ID format');
+  // }
 
   const contact = await getContactById(contactId);
 
