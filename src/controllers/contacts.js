@@ -1,23 +1,32 @@
 import createHttpError from 'http-errors';
 import { createContact, deleteContact, getAllContacts, getContactById, updateContact } from '../services/contacts.js';
 import mongoose from 'mongoose';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export const getContactsController = async (req, res) => {
-    const contacts = await getAllContacts();
+  const { page, perPage } = parsePaginationParams(req.query);
+  const { sortBy, sortOrder} = parseSortParams(req.query);
+  const filter = parseFilterParams(req.query);
 
-    res.json({
-      status: 200,
-      message: "Successfully found contacts!",
-      data: contacts,
-    });
+  const contacts = await getAllContacts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter
+  });
+
+  res.json({
+    status: 200,
+    message: "Successfully found contacts!",
+    data: contacts,
+  });
 };
 
 export const getContactsByIdController = async (req, res, next) => {
   const { contactId } = req.params;
-
-  if (!mongoose.Types.ObjectId.isValid(contactId)) {
-    return next(createHttpError(400, 'Invalid contact ID format'));
-  }
 
   const contact = await getContactById(contactId);
 
