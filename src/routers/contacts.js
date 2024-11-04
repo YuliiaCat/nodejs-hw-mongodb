@@ -7,13 +7,13 @@ import { contactSchema } from "../validation/contacts.js";
 
 const router = Router();
 
-router.get('/contacts', ctrlWrapper(getContactsController));
-router.get('/contacts/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
+router.get('/', ctrlWrapper(getContactsController));
+router.get('/:contactId', isValidId, ctrlWrapper(getContactsByIdController));
 
-router.post('/contacts', validateBody(contactSchema), ctrlWrapper(createContactsController));
+router.post('/', validateBody(contactSchema), ctrlWrapper(createContactsController));
 
-router.patch('/contacts/:contactId', validateBody(contactSchema), isValidId, ctrlWrapper(patchContactController));
+router.patch('/:contactId', validateBody(contactSchema), isValidId, ctrlWrapper(patchContactController));
 
-router.delete('/contacts/:contactId', isValidId, ctrlWrapper(deleteContactController));
+router.delete('/:contactId', isValidId, ctrlWrapper(deleteContactController));
 
 export default router;
