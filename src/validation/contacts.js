@@ -18,4 +18,5 @@ export const contactSchema = Joi.object({
     'any.required': 'Contact type is required',
   }),
   userId: Joi.string(),
+  photo: Joi.any().optional(),
 });

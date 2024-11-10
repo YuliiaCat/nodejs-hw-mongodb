@@ -4,6 +4,10 @@ import mongoose from 'mongoose';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { saveFileToUploadDir } from '../utils/saveFileToUploadDir.js';
+import { env } from '../utils/env.js';
+import { ENABLE_CLOUDINARY } from '../constants/index.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 export const getContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
@@ -51,7 +55,8 @@ export const createContactsController = async (req, res) => {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     contactType: req.body.contactType,
-    userId: req.user.id
+    userId: req.user.id,
+    photo: req.file ? req.file.path : null,
   };
 
   const contact = await createContact(data);
@@ -65,12 +70,28 @@ export const createContactsController = async (req, res) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
+  const photo = req.file;
+
+  let photoUrl;
+
+  if (photo) {
+    if (env(ENABLE_CLOUDINARY) === 'true') {
+      photoUrl = await uploadToCloudinary(photo);
+    } else {
+      photoUrl = await saveFileToUploadDir(photo);
+    }
+  }
 
   if (!mongoose.Types.ObjectId.isValid(contactId)) {
     return next(createHttpError(400, 'Invalid contact ID format'));
   }
   
-  const updatedContact = await updateContact(contactId, req.body, req.user.id);
+  const updatedContact = await updateContact(contactId, {
+      ...req.body,
+      photo: photoUrl 
+    },
+    req.user.id
+  );
 
   if (!updatedContact) {
     return next(createHttpError(404, 'Contact not found'));
