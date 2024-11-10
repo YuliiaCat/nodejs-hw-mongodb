@@ -8,8 +8,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { env } from './utils/env.js';
 import { UPLOAD_DIR } from './constants/index.js';
 import { createDirIfNotExists } from './utils/createDirIfNotExists.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
-const PORT = Number(env('PORT', '3000'));
+const PORT = Number(env('PORT', '8080'));
 
 export const setupServer = () => {
   const app = express();
@@ -20,6 +21,7 @@ export const setupServer = () => {
   app.use(express.json());
   app.use(cors());
   app.use('/uploads', express.static(UPLOAD_DIR));
+  app.use('/api-docs', swaggerDocs());
 
   app.use(
     pino({
