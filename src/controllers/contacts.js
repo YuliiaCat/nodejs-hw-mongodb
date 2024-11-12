@@ -51,12 +51,18 @@ export const getContactsByIdController = async (req, res, next) => {
 };
 
 export const createContactsController = async (req, res) => {
+  let photoUrl = null;
+
+  if (req.file) {
+    photoUrl = await uploadToCloudinary(req.file);
+  }
+
   const data = {
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
     contactType: req.body.contactType,
     userId: req.user.id,
-    photo: req.file ? req.file.path : null,
+    photo: photoUrl,
   };
 
   const contact = await createContact(data);
