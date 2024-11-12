@@ -10,7 +10,7 @@ router.post('/register', validateBody(registerUserSchema), ctrlWrapper(registerU
 router.post('/login', validateBody(loginUserSchema), ctrlWrapper(loginUserController));
 router.post('/refresh', ctrlWrapper(refreshUserSessionController));
 router.post('/logout', ctrlWrapper(logoutUserController));
-router.post('/request-reset-email', validateBody(requestResetEmailShema), ctrlWrapper(requestResetEmailController));
+router.post('/send-reset-email', validateBody(requestResetEmailShema), ctrlWrapper(requestResetEmailController));
 router.post('/reset-pwd', validateBody(resetPasswordSchema), ctrlWrapper(resetPasswordController));
 
 export default router;
