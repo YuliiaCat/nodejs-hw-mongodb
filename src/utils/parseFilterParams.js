@@ -28,10 +28,10 @@ export const parseFilterParams = (query) => {
   const { type, isFavourite } = query;
 
   const parsedType = parseType(type);
-  const parsedIsFavorute = parseIsFavorite(isFavourite);
+  const parsedIsFavorite = parseIsFavorite(isFavourite);
 
   return {
     type: parsedType,
-    isFavourite: parsedIsFavorute,
+    isFavourite: parsedIsFavorite,
   };
 };
