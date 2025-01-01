@@ -1,5 +1,6 @@
+import createHttpError from "http-errors";
 import { ONE_MONTH } from "../constants/index.js";
-import { loginUser, logoutUser, refreshUsersSession, registerUser, requestResetToken, resetPassword } from "../services/auth.js";
+import { getUser, loginUser, logoutUser, refreshUsersSession, registerUser, requestResetToken, resetPassword } from "../services/auth.js";
 
 const setupSession = (res, session) => {
   res.cookie('refreshToken', session.refreshToken, {
@@ -27,11 +28,14 @@ export const loginUserController = async (req, res) => {
 
   setupSession(res, session);
 
+  const { accessToken, userId: _id } = session;
+
   res.status(200).json({
 		status: 200,
 		message: "Successfully logged in an user!",
 		data: {
-      accessToken: session.accessToken,
+      accessToken,
+      _id,
     },
   });
 };
@@ -81,3 +85,17 @@ export const resetPasswordController = async (req, res) => {
     data: {}
   });
 };
+
+export async function infoController(req, res, next) {
+  const userId = req.user?.id;
+  const user = await getUser(userId);
+
+  if (!user) {
+    return next(createHttpError(404, 'User not found'));
+  }
+  res.json({
+    status: 200,
+    message: "Successfully found user!",
+    data: user,
+  });
+}

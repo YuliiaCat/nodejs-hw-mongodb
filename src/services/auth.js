@@ -4,7 +4,7 @@ import { UsersCollection } from "../db/models/user.js";
 import bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
 import { SessionsCollection } from "../db/models/session.js";
-import { APP_DOMAIN, FIFTEEN_MINUTES, JWT_SECRET, ONE_MONTH, SMTP, TEMPLATES_DIR } from "../constants/index.js";
+import { APP_DOMAIN, THIRTY_MINUTES, JWT_SECRET, ONE_MONTH, SMTP, TEMPLATES_DIR } from "../constants/index.js";
 import { env } from "../utils/env.js";
 import { sendEmail } from "../utils/sendEmail.js";
 import path from "node:path";
@@ -18,7 +18,7 @@ const createSession = () => {
   return {
     accessToken,
     refreshToken,
-    accessTokenValidUntil: new Date(Date.now() + FIFTEEN_MINUTES),
+    accessTokenValidUntil: new Date(Date.now() + THIRTY_MINUTES),
     refreshTokenValidUntil: new Date(Date.now() + ONE_MONTH),
   };
 };
@@ -60,10 +60,7 @@ export const loginUser = async (payload) => {
 };
 
 export const refreshUsersSession = async ({ sessionId, refreshToken }) => {
-  const session = await SessionsCollection.findOne({
-    _id: sessionId,
-    refreshToken,
-  });
+  const session = await SessionsCollection.findOne({ _id: sessionId, refreshToken });
 
   if (!session) {
     throw createHttpError(401, 'Session not found');
@@ -161,3 +158,8 @@ export const resetPassword = async (payload) => {
 
   await SessionsCollection.deleteMany({ userId: user._id });
 };
+
+export async function getUser(userId) {
+  const user = await UsersCollection.findById(userId);
+  return user;
+}
