@@ -6,6 +6,7 @@ export const contactSchema = Joi.object({
     'string.max': 'Name should have at most 20 characters',
     'any.required': 'Name is required',
   }),
+  lastName: Joi.string(),
   phoneNumber: Joi.number().required().messages({
     'any.required': 'Phone number is required'
   }),

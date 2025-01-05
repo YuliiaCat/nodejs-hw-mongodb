@@ -59,6 +59,7 @@ export const createContactsController = async (req, res) => {
 
   const data = {
     name: req.body.name,
+    lastName: req.body.lastName,
     phoneNumber: req.body.phoneNumber,
     contactType: req.body.contactType,
     userId: req.user.id,
